@@ -1,5 +1,6 @@
 import cv2
 import sys
+import numpy as np
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 class Window(QtWidgets.QMainWindow):
@@ -42,6 +43,16 @@ class Window(QtWidgets.QMainWindow):
 	def equalize_histogram(self):
 		print(self.imgnum)
 		self.open_image(3) # show the created image
+
+	def calc_histogram(self, I):
+		R, C, B = I.shape
+
+		hist = np.zeros([256, 1, B], dtype=np.uint8)
+
+		for g in range(256):
+			hist[g, 0, ...] = np.sum(np.sum(I == g, 0), 0)
+
+		return hist
 
 
 def main():
