@@ -12,6 +12,8 @@ class Window(QtWidgets.QMainWindow):
 		self.show()
 
 		self.imgnum = 1
+		self.hist1 = None
+		self.hist2 = None
 
 		inputAction = QtWidgets.QAction("Open Input", self)
 		inputAction.triggered.connect(lambda: self.open_image(1))
@@ -40,9 +42,26 @@ class Window(QtWidgets.QMainWindow):
 		# extract the histograms
 
 	def equalize_histogram(self):
-		print(self.imgnum)
-		self.open_image(3) # show the created image
 
+		if self.hist1 is not None and self.hist2 is not None:
+			K = np.zeros([R, C, B], dtype=np.uint8)
+
+			L = self.lookup_creator(self.hist1, self.hist2)
+			for i in range(R):
+				for j in range(C):
+					K[i][j][0] = L[0, Img1[i][j][0], 0]
+					K[i][j][1] = L[1, Img1[i][j][1], 0]
+					K[i][j][2] = L[2, Img1[i][j][2], 0]
+
+			return K
+
+		else:
+			msg = QtWidgets.QMessageBox.warning(self, "Warning", "Both Input and Target images must be open to continue to this job!", QtWidgets.QMessageBox.Ok)
+			return None
+
+	def lookup_creator(self, pdf1, pdf2):
+		# to be implemented...
+		return None
 
 def main():
 	app = QtWidgets.QApplication(sys.argv)
