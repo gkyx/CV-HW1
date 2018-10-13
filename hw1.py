@@ -47,7 +47,7 @@ class Window(QtWidgets.QMainWindow):
 	def calc_histogram(self, I):
 		R, C, B = I.shape
 
-		hist = np.zeros([256, 1, B], dtype=np.uint8)
+		hist = np.zeros([256, 1, B], dtype='int64')
 
 		for g in range(256):
 			hist[g, 0, ...] = np.sum(np.sum(I == g, 0), 0)
