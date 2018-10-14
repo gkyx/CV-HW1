@@ -7,9 +7,8 @@ class Window(QtWidgets.QMainWindow):
 
 	def __init__(self):
 		super(Window, self).__init__()
-		self.setWindowTitle("PyQT5")
+		self.setWindowTitle("Histogram Equalization")
 		self.setWindowState(QtCore.Qt.WindowMaximized)
-		self.show()
 
 		self.imgnum = 1
 		self.hist1 = None
@@ -35,6 +34,23 @@ class Window(QtWidgets.QMainWindow):
 
 		self.toolBar = self.addToolBar("ToolBar")
 		self.toolBar.addAction(equalizeHistAction)
+
+		self.centralwidget = QtWidgets.QWidget(self)
+		self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
+		self.horizontalLayout.setContentsMargins(100, -1, 100, -1)
+		self.horizontalLayout.setSpacing(100)
+		self.widget = QtWidgets.QWidget(self.centralwidget)
+		self.widget.setStyleSheet("border:1px solid rgb(200, 200, 200);")
+		self.horizontalLayout.addWidget(self.widget)
+		self.widget_2 = QtWidgets.QWidget(self.centralwidget)
+		self.widget_2.setStyleSheet("border:1px solid rgb(200, 200, 200);")
+		self.horizontalLayout.addWidget(self.widget_2)
+		self.widget_3 = QtWidgets.QWidget(self.centralwidget)
+		self.widget_3.setStyleSheet("border:1px solid rgb(200, 200, 200);")
+		self.horizontalLayout.addWidget(self.widget_3)
+		self.setCentralWidget(self.centralwidget)
+		
+		self.show()
 
 
 	def open_image(self, imgSelect):
