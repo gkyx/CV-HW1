@@ -12,6 +12,8 @@ class Window(QtWidgets.QMainWindow):
 		self.show()
 
 		self.imgnum = 1
+		self.hist1 = None
+		self.hist2 = None
 
 		inputAction = QtWidgets.QAction("Open Input", self)
 		inputAction.triggered.connect(lambda: self.open_image(1))
@@ -36,13 +38,23 @@ class Window(QtWidgets.QMainWindow):
 
 
 	def open_image(self, imgSelect):
-		print(imgSelect)
+		if imgSelect == 1:
+			ImgArray = cv2.imread("color2.png")
+			self.hist1 = self.calc_histogram(ImgArray)
+			# show both the Image and Histograms
+		elif imgSelect == 2:
+			ImgArray = cv2.imread("color1.png")
+			self.hist2 = self.calc_histogram(ImgArray)
+			# show both the Image and Histograms
+
 		# extract the histograms
 
 	def equalize_histogram(self):
 		print(self.imgnum)
 		self.open_image(3) # show the created image
 
+	def calc_histogram(self, I):
+		return None
 
 def main():
 	app = QtWidgets.QApplication(sys.argv)
