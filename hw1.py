@@ -140,7 +140,14 @@ class Window(QtWidgets.QMainWindow):
 		return LUT
   
 	def calc_histogram(self, I):
-		return None
+		R, C, B = I.shape
+
+		hist = np.zeros([256, 1, B], dtype='int64')
+
+		for g in range(256):
+			hist[g, 0, ...] = np.sum(np.sum(I == g, 0), 0)
+
+		return hist
 
 def main():
 	app = QtWidgets.QApplication(sys.argv)
