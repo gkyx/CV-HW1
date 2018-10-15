@@ -15,6 +15,9 @@ class Window(QtWidgets.QMainWindow):
 		self.imgnum = 1
 		self.hist1 = None
 		self.hist2 = None
+		self.hist3 = None
+		self.Img1 = None
+		self.Img2 = None
 		self.isInputOpen = False
 		self.isTargetOpen = False
 
@@ -68,8 +71,8 @@ class Window(QtWidgets.QMainWindow):
 
 	def open_image(self, imgSelect):
 		if imgSelect == 1 and not self.isInputOpen:
-			ImgArray = cv2.imread("color2.png")
-			self.hist1 = self.calc_histogram(ImgArray)
+			self.Img1 = cv2.imread("color2.png")
+			self.hist1 = self.calc_histogram(self.Img1)
 			
 			# Image
 
@@ -103,8 +106,11 @@ class Window(QtWidgets.QMainWindow):
 			self.isInputOpen = True
 
 		elif imgSelect == 2 and not self.isTargetOpen:
-			ImgArray = cv2.imread("color1.png")
-			self.hist1 = self.calc_histogram(ImgArray)
+			self.Img2 = cv2.imread("color1.png")
+			
+			self.R, self.C, self.B = self.Img2.shape
+
+			self.hist2 = self.calc_histogram(self.Img2)
 			
 			# Image
 
@@ -140,16 +146,47 @@ class Window(QtWidgets.QMainWindow):
 
 	def equalize_histogram(self):
 		if self.hist1 is not None and self.hist2 is not None:
-			K = np.zeros([R, C, B], dtype=np.uint8)
+			K = np.zeros([self.R, self.C, self.B], dtype=np.uint8)
 
 			L = self.lookup_creator(self.hist1, self.hist2)
-			for i in range(R):
-				for j in range(C):
-					K[i][j][0] = L[0, Img1[i][j][0], 0]
-					K[i][j][1] = L[1, Img1[i][j][1], 0]
-					K[i][j][2] = L[2, Img1[i][j][2], 0]
+			for i in range(self.R):
+				for j in range(self.C):
+					K[i][j][0] = L[0, self.Img1[i][j][0], 0]
+					K[i][j][1] = L[1, self.Img1[i][j][1], 0]
+					K[i][j][2] = L[2, self.Img1[i][j][2], 0]
 
-			return K
+			cv2.imwrite("./equalized.png", K)
+
+			self.hist3 = self.calc_histogram(K)
+			
+			# Image
+
+			pix = QtGui.QPixmap('equalized.png')
+			label = QtWidgets.QLabel(self.widget_3)
+			label.setPixmap(pix)
+			label.setAlignment(QtCore.Qt.AlignCenter)
+			label.setStyleSheet("border:0px")
+			self.VerticalLayout3.addWidget(label)
+
+			# histograms
+
+			plt.gcf().clear()
+			plt.subplot(3,1,1)
+			plt.bar(range(256), self.hist3[:,0,2], align='center', alpha=0.5, color='#FF0000')
+			plt.subplot(3,1,2)
+			plt.bar(range(256), self.hist3[:,0,1], align='center', alpha=0.5, color='#00FF00')
+			plt.subplot(3,1,3)
+			plt.bar(range(256), self.hist3[:,0,0], align='center', alpha=0.5, color='#0000FF')
+			
+			plt.savefig("./equalizedHistogram.png", dpi=80)
+
+			pix2 = QtGui.QPixmap('equalizedHistogram.png')
+			label2 = QtWidgets.QLabel(self.widget_3)
+			label2.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
+			label2.setPixmap(pix2)
+			label2.setAlignment(QtCore.Qt.AlignCenter)
+			label2.setStyleSheet("border:0px")
+			self.VerticalLayout3.addWidget(label2)
 
 		else:
 			msg = QtWidgets.QMessageBox.warning(self, "Warning", "Both Input and Target images must be open to continue to this job!", QtWidgets.QMessageBox.Ok)
@@ -186,7 +223,6 @@ class Window(QtWidgets.QMainWindow):
 		# red look up table
 		for i in range(256):
 			while cdf2[j, 0, 0] < cdf1[i, 0, 0] and j < 255:
-				print(cdf1[i, 0, 0], cdf2[j, 0, 0])
 				j += 1
 			
 			LUT[0, i, 0] = j
