@@ -39,16 +39,25 @@ class Window(QtWidgets.QMainWindow):
 
 		self.centralwidget = QtWidgets.QWidget(self)
 		self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
-		self.horizontalLayout.setContentsMargins(100, -1, 100, -1)
+		self.horizontalLayout.setContentsMargins(100, 0, 100, 0)
 		self.horizontalLayout.setSpacing(100)
 		self.widget = QtWidgets.QWidget(self.centralwidget)
 		self.widget.setStyleSheet("border:1px solid rgb(200, 200, 200);")
+		self.VerticalLayout1 = QtWidgets.QVBoxLayout(self.widget)
+		self.VerticalLayout1.setContentsMargins(10, 0, 10, 0)
+		self.VerticalLayout1.setSpacing(0)
 		self.horizontalLayout.addWidget(self.widget)
 		self.widget_2 = QtWidgets.QWidget(self.centralwidget)
 		self.widget_2.setStyleSheet("border:1px solid rgb(200, 200, 200);")
+		self.VerticalLayout2 = QtWidgets.QVBoxLayout(self.widget_2)
+		self.VerticalLayout2.setContentsMargins(10, 0, 10, 0)
+		self.VerticalLayout2.setSpacing(0)
 		self.horizontalLayout.addWidget(self.widget_2)
 		self.widget_3 = QtWidgets.QWidget(self.centralwidget)
 		self.widget_3.setStyleSheet("border:1px solid rgb(200, 200, 200);")
+		self.VerticalLayout3 = QtWidgets.QVBoxLayout(self.widget_3)
+		self.VerticalLayout3.setContentsMargins(10, 0, 10, 0)
+		self.VerticalLayout3.setSpacing(0)
 		self.horizontalLayout.addWidget(self.widget_3)
 		self.setCentralWidget(self.centralwidget)
 		
@@ -59,11 +68,68 @@ class Window(QtWidgets.QMainWindow):
 		if imgSelect == 1:
 			ImgArray = cv2.imread("color2.png")
 			self.hist1 = self.calc_histogram(ImgArray)
-			# show both the Image and Histograms
+			
+			# Image
+
+			pix = QtGui.QPixmap('color2.png')
+			label = QtWidgets.QLabel(self.widget)
+			label.setPixmap(pix)
+			label.setAlignment(QtCore.Qt.AlignCenter)
+			label.setStyleSheet("border:0px")
+			self.VerticalLayout1.addWidget(label)
+
+			# histograms
+
+			plt.gcf().clear()
+			plt.subplot(3,1,1)
+			plt.bar(range(256), self.hist1[:,0,2], align='center', alpha=0.5, color='#FF0000')
+			plt.subplot(3,1,2)
+			plt.bar(range(256), self.hist1[:,0,1], align='center', alpha=0.5, color='#00FF00')
+			plt.subplot(3,1,3)
+			plt.bar(range(256), self.hist1[:,0,0], align='center', alpha=0.5, color='#0000FF')
+			
+			plt.savefig("./inputHistogram.png", dpi=80)
+
+			pix2 = QtGui.QPixmap('inputHistogram.png')
+			label2 = QtWidgets.QLabel(self.widget)
+			label2.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
+			label2.setPixmap(pix2)
+			label2.setAlignment(QtCore.Qt.AlignCenter)
+			label2.setStyleSheet("border:0px")
+			self.VerticalLayout1.addWidget(label2)
+
 		elif imgSelect == 2:
 			ImgArray = cv2.imread("color1.png")
-			self.hist2 = self.calc_histogram(ImgArray)
-			# show both the Image and Histograms
+			self.hist1 = self.calc_histogram(ImgArray)
+			
+			# Image
+
+			pix = QtGui.QPixmap('color1.png')
+			label = QtWidgets.QLabel(self.widget_2)
+			label.setPixmap(pix)
+			label.setAlignment(QtCore.Qt.AlignCenter)
+			label.setStyleSheet("border:0px")
+			self.VerticalLayout2.addWidget(label)
+
+			# histograms
+
+			plt.gcf().clear()
+			plt.subplot(3,1,1)
+			plt.bar(range(256), self.hist1[:,0,2], align='center', alpha=0.5, color='#FF0000')
+			plt.subplot(3,1,2)
+			plt.bar(range(256), self.hist1[:,0,1], align='center', alpha=0.5, color='#00FF00')
+			plt.subplot(3,1,3)
+			plt.bar(range(256), self.hist1[:,0,0], align='center', alpha=0.5, color='#0000FF')
+			
+			plt.savefig("./targetHistogram.png", dpi=80)
+
+			pix2 = QtGui.QPixmap('targetHistogram.png')
+			label2 = QtWidgets.QLabel(self.widget_2)
+			label2.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
+			label2.setPixmap(pix2)
+			label2.setAlignment(QtCore.Qt.AlignCenter)
+			label2.setStyleSheet("border:0px")
+			self.VerticalLayout2.addWidget(label2)
 
 		# extract the histograms
 
