@@ -15,6 +15,8 @@ class Window(QtWidgets.QMainWindow):
 		self.imgnum = 1
 		self.hist1 = None
 		self.hist2 = None
+		self.isInputOpen = False
+		self.isTargetOpen = False
 
 		inputAction = QtWidgets.QAction("Open Input", self)
 		inputAction.triggered.connect(lambda: self.open_image(1))
@@ -39,7 +41,7 @@ class Window(QtWidgets.QMainWindow):
 
 		self.centralwidget = QtWidgets.QWidget(self)
 		self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
-		self.horizontalLayout.setContentsMargins(100, 0, 100, 0)
+		self.horizontalLayout.setContentsMargins(100, 10, 100, 10)
 		self.horizontalLayout.setSpacing(100)
 		self.widget = QtWidgets.QWidget(self.centralwidget)
 		self.widget.setStyleSheet("border:1px solid rgb(200, 200, 200);")
@@ -65,7 +67,7 @@ class Window(QtWidgets.QMainWindow):
 
 
 	def open_image(self, imgSelect):
-		if imgSelect == 1:
+		if imgSelect == 1 and not self.isInputOpen:
 			ImgArray = cv2.imread("color2.png")
 			self.hist1 = self.calc_histogram(ImgArray)
 			
@@ -98,7 +100,9 @@ class Window(QtWidgets.QMainWindow):
 			label2.setStyleSheet("border:0px")
 			self.VerticalLayout1.addWidget(label2)
 
-		elif imgSelect == 2:
+			self.isInputOpen = True
+
+		elif imgSelect == 2 and not self.isTargetOpen:
 			ImgArray = cv2.imread("color1.png")
 			self.hist1 = self.calc_histogram(ImgArray)
 			
@@ -131,7 +135,7 @@ class Window(QtWidgets.QMainWindow):
 			label2.setStyleSheet("border:0px")
 			self.VerticalLayout2.addWidget(label2)
 
-		# extract the histograms
+			self.isTargetOpen = True
 
 
 	def equalize_histogram(self):
