@@ -125,11 +125,11 @@ class Window(QtWidgets.QMainWindow):
 
 			plt.gcf().clear()
 			plt.subplot(3,1,1)
-			plt.bar(range(256), self.hist1[:,0,2], align='center', alpha=0.5, color='#FF0000')
+			plt.bar(range(256), self.hist2[:,0,2], align='center', alpha=0.5, color='#FF0000')
 			plt.subplot(3,1,2)
-			plt.bar(range(256), self.hist1[:,0,1], align='center', alpha=0.5, color='#00FF00')
+			plt.bar(range(256), self.hist2[:,0,1], align='center', alpha=0.5, color='#00FF00')
 			plt.subplot(3,1,3)
-			plt.bar(range(256), self.hist1[:,0,0], align='center', alpha=0.5, color='#0000FF')
+			plt.bar(range(256), self.hist2[:,0,0], align='center', alpha=0.5, color='#0000FF')
 			
 			plt.savefig("./targetHistogram.png", dpi=80)
 
@@ -220,7 +220,7 @@ class Window(QtWidgets.QMainWindow):
 
 		j = 0
 
-		# red look up table
+		# blue look up table
 		for i in range(256):
 			while cdf2[j, 0, 0] < cdf1[i, 0, 0] and j < 255:
 				j += 1
@@ -236,7 +236,7 @@ class Window(QtWidgets.QMainWindow):
 			LUT[1, i, 0] = j
 
 		j = 0
-		# blue look up table
+		# red look up table
 		for i in range(256):
 			while cdf2[j, 0, 2] < cdf1[i, 0, 2] and j < 255:
 				j += 1
