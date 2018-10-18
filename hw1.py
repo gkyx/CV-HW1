@@ -4,8 +4,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PyQt5 import QtGui, QtCore, QtWidgets
 
-class Window(QtWidgets.QMainWindow):
+############
+# Gokay Gas
+# 150150107
+# 18.10.2018
+############
 
+class Window(QtWidgets.QMainWindow):
 
 	def __init__(self):
 		super(Window, self).__init__()
@@ -42,24 +47,32 @@ class Window(QtWidgets.QMainWindow):
 		self.toolBar = self.addToolBar("ToolBar")
 		self.toolBar.addAction(equalizeHistAction)
 
+		# central image that will keep the widgets of the images.
 		self.centralwidget = QtWidgets.QWidget(self)
+		# horizontal layout for the 3 columns
 		self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
 		self.horizontalLayout.setContentsMargins(100, 10, 100, 10)
 		self.horizontalLayout.setSpacing(100)
+		# input image widget
 		self.widget = QtWidgets.QWidget(self.centralwidget)
 		self.widget.setStyleSheet("border:1px solid rgb(200, 200, 200);")
+		# vertical layout to divide images and plots
 		self.VerticalLayout1 = QtWidgets.QVBoxLayout(self.widget)
 		self.VerticalLayout1.setContentsMargins(10, 0, 10, 0)
 		self.VerticalLayout1.setSpacing(0)
 		self.horizontalLayout.addWidget(self.widget)
+		# target image widget
 		self.widget_2 = QtWidgets.QWidget(self.centralwidget)
 		self.widget_2.setStyleSheet("border:1px solid rgb(200, 200, 200);")
+		# vertical layout to divide images and plots
 		self.VerticalLayout2 = QtWidgets.QVBoxLayout(self.widget_2)
 		self.VerticalLayout2.setContentsMargins(10, 0, 10, 0)
 		self.VerticalLayout2.setSpacing(0)
 		self.horizontalLayout.addWidget(self.widget_2)
+		# output image widget
 		self.widget_3 = QtWidgets.QWidget(self.centralwidget)
 		self.widget_3.setStyleSheet("border:1px solid rgb(200, 200, 200);")
+		# vertical layout to divide images and plots
 		self.VerticalLayout3 = QtWidgets.QVBoxLayout(self.widget_3)
 		self.VerticalLayout3.setContentsMargins(10, 0, 10, 0)
 		self.VerticalLayout3.setSpacing(0)
@@ -70,6 +83,7 @@ class Window(QtWidgets.QMainWindow):
 
 
 	def open_image(self, imgSelect):
+		# one function for both of the input and target images
 		if imgSelect == 1 and not self.isInputOpen:
 			self.Img1 = cv2.imread("color2.png")
 			self.hist1 = self.calc_histogram(self.Img1)
@@ -151,6 +165,7 @@ class Window(QtWidgets.QMainWindow):
 			L = self.lookup_creator(self.hist1, self.hist2)
 			for i in range(self.R):
 				for j in range(self.C):
+					# mapping
 					K[i][j][0] = L[0, self.Img1[i][j][0], 0]
 					K[i][j][1] = L[1, self.Img1[i][j][1], 0]
 					K[i][j][2] = L[2, self.Img1[i][j][2], 0]
@@ -261,12 +276,3 @@ def main():
 	sys.exit(app.exec_())
 
 main()
-
-
-
-#image = cv2.imread("color1.png")
-#gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-#cv2.imshow("1", image)
-#cv2.imshow("2", gray_image)
-#cv2.waitKey(0)
-#cv2.destroyAllWindows()
